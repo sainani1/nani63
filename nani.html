@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guidance Plus</title>
+    <!-- Tailwind CSS CDN for a professional and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 1rem;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #4f46e5;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 0.5rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 0.5rem;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-message {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .chat-message.sent {
+            background-color: #4f46e5;
+            color: #fff;
+            align-self: flex-end;
+            margin-left: auto;
+            max-width: 80%;
+        }
+
+        .chat-message.received {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            align-self: flex-start;
+            margin-right: auto;
+            max-width: 80%;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-md">
+        <nav class="container flex justify-between items-center py-4">
+            <h1 class="text-3xl font-bold text-gray-800">Guidance Plus</h1>
+            <div id="auth-buttons">
+                <button onclick="showPage('login-page')" class="btn btn-primary">Login</button>
+            </div>
+            <div id="user-info" class="hidden user-dropdown">
+                <button id="user-profile-btn" class="btn btn-secondary flex items-center">
+                    <span id="current-username"></span>
+                    <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="handleLogout(); return false;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow p-4">
+        <!-- Landing Page -->
+        <section id="landing-page" class="page-content container flex flex-col items-center text-center">
+            <div class="my-12">
+                <h2 class="text-5xl font-extrabold text-gray-900 mb-4">Your Path to a Brighter Career</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Guidance Plus is your dedicated platform for career growth. We connect you with opportunities,
+                    expert guidance, and professionals to help you achieve your goals.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 my-12">
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Our Aim</h3>
+                    <p class="text-gray-600">
+                        To provide accessible, high-quality career guidance and opportunities to students and
+                        professionals worldwide.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Our Vision</h3>
+                    <p class="text-gray-600">
+                        To create a global community where every individual has the resources to pursue their dream
+                        career,
+                        unlocked by the power of mentorship and access.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">What We Do</h3>
+                    <p class="text-gray-600">
+                        We connect you with a network of seasoned professionals, agents, and administrators to help you
+                        find, apply for, and
+                        succeed in internships and professional development.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Login/Register Page -->
+        <section id="login-page" class="page-content container">
+            <div class="card max-w-lg mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Welcome</h2>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-username" class="block text-gray-700">Username</label>
+                        <input type="text" id="login-username" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-gray-700">Password</label>
+                        <input type="password" id="login-password" class="input-field" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                    <p class="text-center text-gray-600 mt-4">
+                        Don't have an account? <a href="#" onclick="toggleForm('register')"
+                            class="text-blue-600 hover:underline">Register here.</a>
+                    </p>
+                </form>
+                <form id="register-form" class="space-y-4 hidden">
+                    <div class="text-center text-sm text-gray-500 mb-4">
+                        Note: Your registration requires admin approval. You will not be able to log in until your
+                        account is approved.
+                    </div>
+                    <div>
+                        <label for="reg-username" class="block text-gray-700">Username</label>
+                        <input type="text" id="reg-username" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="reg-password" class="block text-gray-700">Password</label>
+                        <input type="password" id="reg-password" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="reg-role" class="block text-gray-700">Role</label>
+                        <select id="reg-role" class="input-field" required>
+                            <option value="customer">Customer</option>
+                            <option value="agent">Agent</option>
+                            <option value="professional">Professional</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Register</button>
+                    <p class="text-center text-gray-600 mt-4">
+                        Already have an account? <a href="#" onclick="toggleForm('login')"
+                            class="text-blue-600 hover:underline">Login here.</a>
+                    </p>
+                </form>
+                <div id="login-message" class="mt-4 text-center font-bold"></div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="admin-dashboard" class="page-content container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Manage Users -->
+                <div class="card md:col-span-1 lg:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Manage Users</h3>
+                    <div id="user-list"></div>
+                </div>
+                <!-- Add Internship -->
+                <div class="card md:col-span-1 lg:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Add Internship</h3>
+                    <form id="add-internship-form">
+                        <label for="internship-title">Title</label>
+                        <input type="text" id="internship-title" class="input-field" required>
+                        <label for="internship-company">Company</label>
+                        <input type="text" id="internship-company" class="input-field" required>
+                        <label for="internship-link">Application Link</label>
+                        <input type="url" id="internship-link" class="input-field" required>
+                        <label for="internship-guidelines">Guidelines</label>
+                        <textarea id="internship-guidelines" class="input-field" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-primary w-full mt-4">Add Internship</button>
+                    </form>
+                </div>
+                <!-- Internship Requests (New Section) -->
+                <div class="card md:col-span-1 lg:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Internship Requests</h3>
+                    <div id="internship-requests-admin"></div>
+                </div>
+                <!-- Schedule Webinar -->
+                <div class="card md:col-span-2 lg:col-span-3">
+                    <h3 class="text-xl font-bold mb-4">Schedule Webinar</h3>
+                    <form id="schedule-webinar-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="schedule-topic" class="block text-gray-700">Topic</label>
+                            <input type="text" id="schedule-topic" class="input-field" required>
+                        </div>
+                        <div>
+                            <label for="schedule-professional" class="block text-gray-700">Assign Professional</label>
+                            <select id="schedule-professional" class="input-field" required></select>
+                        </div>
+                        <div>
+                            <label for="schedule-date" class="block text-gray-700">Date</label>
+                            <input type="date" id="schedule-date" class="input-field" required>
+                        </div>
+                        <div>
+                            <label for="schedule-time" class="block text-gray-700">Time</label>
+                            <input type="time" id="schedule-time" class="input-field" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="btn btn-primary w-full mt-4">Schedule Webinar</button>
+                        </div>
+                    </form>
+                    <h3 class="text-xl font-bold mb-4 mt-8">Scheduled Webinars</h3>
+                    <div id="admin-webinar-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Dashboard -->
+        <section id="customer-dashboard" class="page-content container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Customer Dashboard</h2>
+            <div class="dashboard-grid">
+                <!-- Internships -->
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-4">Internship Opportunities</h3>
+                    <div id="internship-list-customer"></div>
+                    <hr class="my-4">
+                    <h4 class="font-bold text-lg mb-2">Request an Internship/Webinar</h4>
+                    <form id="internship-request-form">
+                        <label for="internship-request-topic">Desired Field</label>
+                        <input type="text" id="internship-request-topic" class="input-field"
+                            placeholder="E.g., Software Engineering" required>
+                        <button type="submit" class="btn btn-primary w-full mt-4">Submit Request</button>
+                    </form>
+                    <div id="internship-request-message" class="mt-2 text-center text-sm text-gray-500"></div>
+                </div>
+                <!-- Chat with Agents -->
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-4">Chat with Agents</h3>
+                    <div id="agent-chat-section">
+                        <div class="chat-container">
+                            <div id="customer-chat-messages" class="chat-messages"></div>
+                            <div class="chat-input">
+                                <input type="text" id="customer-chat-input" class="input-field flex-grow mb-0"
+                                    placeholder="Type a message...">
+                                <button onclick="sendChatMessage('agent')"
+                                    class="btn btn-primary ml-2 mb-0">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Join Webinar -->
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-4">Join Webinar</h3>
+                    <form id="join-webinar-form">
+                        <label for="webinar-room-code" class="block text-gray-700">Enter Room Code</label>
+                        <input type="text" id="webinar-room-code"
+                            class="input-field text-center font-bold tracking-widest" placeholder="e.g., A1B2C3"
+                            required>
+                        <button type="submit" class="btn btn-primary w-full mt-4">Join Webinar</button>
+                    </form>
+                    <div id="join-webinar-message" class="mt-2 text-center text-sm text-gray-500"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agent Dashboard -->
+        <section id="agent-dashboard" class="page-content container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Agent Dashboard</h2>
+            <div class="dashboard-grid">
+                <!-- Customer Chats -->
+                <div class="card md:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Customer Chats</h3>
+                    <ul id="customer-chat-list" class="list-disc pl-5"></ul>
+                </div>
+                <!-- Chat View -->
+                <div class="card md:col-span-2">
+                    <h3 id="current-chat-header" class="text-xl font-bold mb-4">Select a Chat to Begin</h3>
+                    <div id="agent-chat-view" class="hidden">
+                        <div class="chat-container">
+                            <div id="agent-chat-messages" class="chat-messages"></div>
+                            <div class="chat-input">
+                                <input type="text" id="agent-chat-input" class="input-field flex-grow mb-0"
+                                    placeholder="Type your guidance here...">
+                                <button onclick="sendChatMessage('customer')"
+                                    class="btn btn-primary ml-2 mb-0">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Dashboard -->
+        <section id="professional-dashboard" class="page-content container">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Professional Dashboard</h2>
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">Assigned Webinars</h3>
+                <div id="professional-webinar-list"></div>
+            </div>
+        </section>
+
+        <!-- Message Box for Alerts -->
+        <div id="message-box" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4">
+            <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm w-full text-center">
+                <p id="message-box-content" class="text-lg font-semibold mb-4"></p>
+                <button onclick="closeMessageBox()" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-200 text-center py-4 text-gray-600">
+        &copy; 2024 Guidance Plus. All rights reserved.
+    </footer>
+
+    <script>
+        // Data structure in localStorage
+        const DB_KEY = 'guidancePlusDB';
+
+        // Get DOM elements
+        const authButtons = document.getElementById('auth-buttons');
+        const userInfo = document.getElementById('user-info');
+        const currentUsername = document.getElementById('current-username');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginMessage = document.getElementById('login-message');
+        const messageBox = document.getElementById('message-box');
+        const messageBoxContent = document.getElementById('message-box-content');
+
+        // State variables
+        let currentUser = null;
+        let db = {
+            users: [],
+            internships: [],
+            internshipRequests: [], // New list for internship requests
+            webinars: [], // Scheduled webinars with start times
+            chats: [],
+            activeWebinars: [], // Webinars that are currently live
+        };
+        let currentChatRecipient = null;
+
+        /**
+         * Initializes the application. Creates a default admin user if none exists.
+         */
+        function initialize() {
+            loadData();
+            if (db.users.length === 0) {
+                console.log("No users found, creating default admin user.");
+                db.users.push({
+                    id: 'admin',
+                    username: 'GuidanceAdmin',
+                    password: 'T9v@xR!2pL$8zQk#5jN',
+                    role: 'admin',
+                    isApproved: true,
+                });
+                saveData();
+            }
+            // Start on the login page by default
+            showPage('login-page');
+        }
+
+        /**
+         * Shows a specific page by ID and hides all others.
+         * @param {string} pageId The ID of the page to show.
+         */
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+
+            // Special logic for dashboards and profile
+            if (pageId.includes('dashboard')) {
+                updateDashboard();
+            }
+        }
+
+        /**
+         * Toggles between the login and register forms on the login page.
+         * @param {string} formType The form to show ('login' or 'register').
+         */
+        function toggleForm(formType) {
+            loginForm.classList.toggle('hidden', formType !== 'login');
+            registerForm.classList.toggle('hidden', formType !== 'register');
+            loginMessage.textContent = '';
+        }
+
+        /**
+         * Saves the current database state to localStorage.
+         */
+        function saveData() {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+        }
+
+        /**
+         * Loads the database state from localStorage.
+         */
+        function loadData() {
+            const storedDB = localStorage.getItem(DB_KEY);
+            if (storedDB) {
+                db = JSON.parse(storedDB);
+            }
+        }
+
+        /**
+         * Displays a message box with the given text.
+         * @param {string} message The message to display.
+         */
+        function showMessageBox(message) {
+            messageBoxContent.textContent = message;
+            messageBox.style.display = 'flex';
+        }
+
+        /**
+         * Hides the message box.
+         */
+        function closeMessageBox() {
+            messageBox.style.display = 'none';
+        }
+
+        /**
+         * Handles user login attempt.
+         * @param {Event} event The form submission event.
+         */
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const user = db.users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                if (user.isApproved) {
+                    currentUser = user;
+                    currentUsername.textContent = currentUser.username;
+                    authButtons.classList.add('hidden');
+                    userInfo.classList.remove('hidden');
+                    loginMessage.textContent = '';
+                    showDashboard(currentUser.role);
+                } else {
+                    showMessageBox('Your registration is pending admin approval. Please wait.');
+                }
+            } else {
+                showMessageBox('Invalid username or password.');
+            }
+        });
+
+        /**
+         * Handles new user registration.
+         * @param {Event} event The form submission event.
+         */
+        registerForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+
+            if (db.users.some(u => u.username === username)) {
+                showMessageBox('Username already exists. Please choose another.');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                password,
+                role,
+                isApproved: false,
+            };
+
+            db.users.push(newUser);
+            saveData();
+            showMessageBox('Registration successful! Please wait for admin approval.');
+            toggleForm('login');
+        });
+
+        /**
+         * Logs out the current user and returns to the landing page.
+         */
+        function handleLogout() {
+            currentUser = null;
+            authButtons.classList.remove('hidden');
+            userInfo.classList.add('hidden');
+            showPage('landing-page');
+        }
+
+        /**
+         * Navigates to the appropriate dashboard based on the user's role.
+         * @param {string} role The role of the current user.
+         */
+        function showDashboard(role) {
+            if (role === 'admin') showPage('admin-dashboard');
+            else if (role === 'customer') showPage('customer-dashboard');
+            else if (role === 'agent') showPage('agent-dashboard');
+            else if (role === 'professional') showPage('professional-dashboard');
+        }
+
+        /**
+         * Updates the content of the current user's dashboard based on their role.
+         */
+        function updateDashboard() {
+            if (!currentUser) return;
+            switch (currentUser.role) {
+                case 'admin':
+                    renderAdminDashboard();
+                    break;
+                case 'customer':
+                    renderCustomerDashboard();
+                    break;
+                case 'agent':
+                    renderAgentDashboard();
+                    break;
+                case 'professional':
+                    renderProfessionalDashboard();
+                    break;
+            }
+        }
+
+        // --- Admin Functions ---
+        function renderAdminDashboard() {
+            const approvedProfessionals = db.users.filter(u => u.role === 'professional' && u.isApproved);
+
+            // Render User List
+            const userListDiv = document.getElementById('user-list');
+            userListDiv.innerHTML = '';
+            db.users.filter(u => u.id !== 'admin').forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'flex items-center justify-between p-2 border-b';
+                userItem.innerHTML = `
+                    <div>
+                        <span class="font-bold">${user.username}</span>
+                        <span class="text-gray-500 text-sm">(${user.role})</span>
+                        ${user.isApproved ? '<span class="ml-2 text-green-500 text-sm">Approved</span>' : '<span class="ml-2 text-red-500 text-sm">Pending</span>'}
+                    </div>
+                    <div>
+                        ${!user.isApproved ? `<button onclick="approveUser('${user.id}')" class="btn btn-primary btn-sm">Approve</button>` : ''}
+                    </div>
+                `;
+                userListDiv.appendChild(userItem);
+            });
+
+            // Populate professional dropdown for scheduling
+            const professionalSelect = document.getElementById('schedule-professional');
+            professionalSelect.innerHTML = '<option value="">Select Professional</option>';
+            approvedProfessionals.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = p.username;
+                professionalSelect.appendChild(option);
+            });
+
+            // Render Scheduled Webinars
+            const webinarListDiv = document.getElementById('admin-webinar-list');
+            webinarListDiv.innerHTML = '';
+
+            db.webinars.forEach(webinar => {
+                const webinarItem = document.createElement('div');
+                webinarItem.className = 'flex flex-col md:flex-row items-center justify-between p-4 border-b';
+
+                const startTime = new Date(webinar.startTime);
+                const isLive = webinar.status === 'live';
+
+                webinarItem.innerHTML = `
+                    <div class="mb-2 md:mb-0">
+                        <span class="font-bold">${webinar.topic}</span>
+                        <span class="text-gray-500 text-sm"> (with ${webinar.professionalName})</span>
+                        <p class="text-sm mt-1">
+                            Scheduled: ${startTime.toLocaleString()}
+                            <span class="font-bold ml-2">Code: ${webinar.roomId}</span>
+                        </p>
+                        <span class="block mt-1 text-sm ${isLive ? 'text-green-600' : 'text-gray-500'}">Status: ${isLive ? 'Live' : 'Scheduled'}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        ${isLive ? `<button onclick="stopWebinar('${webinar.id}')" class="btn btn-secondary btn-sm bg-red-500 text-white hover:bg-red-600">Stop</button>` : ''}
+                    </div>
+                `;
+                webinarListDiv.appendChild(webinarItem);
+            });
+
+            if (db.webinars.length === 0) {
+                webinarListDiv.innerHTML = '<p class="text-gray-500 text-sm">No webinars scheduled yet.</p>';
+            }
+
+            // Render Internship Requests
+            const internshipRequestsDiv = document.getElementById('internship-requests-admin');
+            internshipRequestsDiv.innerHTML = '';
+            if (db.internshipRequests.length === 0) {
+                internshipRequestsDiv.innerHTML = '<p class="text-gray-500 text-sm">No new internship requests.</p>';
+            }
+
+            db.internshipRequests.forEach(request => {
+                const requestItem = document.createElement('div');
+                requestItem.className = 'flex items-center justify-between p-2 border-b';
+                requestItem.innerHTML = `
+                    <div>
+                        <span class="font-bold">${request.topic}</span>
+                        <span class="text-gray-500 text-sm"> (from ${request.customerName})</span>
+                    </div>
+                    <div>
+                        <button onclick="addInternshipFromRequest('${request.id}')" class="btn btn-primary btn-sm">Add Internship</button>
+                    </div>
+                `;
+                internshipRequestsDiv.appendChild(requestItem);
+            });
+        }
+
+        function approveUser(userId) {
+            const user = db.users.find(u => u.id === userId);
+            if (user) {
+                user.isApproved = true;
+                saveData();
+                showMessageBox(`${user.username} has been approved.`);
+                renderAdminDashboard();
+            }
+        }
+
+        document.getElementById('schedule-webinar-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const topic = document.getElementById('schedule-topic').value;
+            const professionalId = document.getElementById('schedule-professional').value;
+            const date = document.getElementById('schedule-date').value;
+            const time = document.getElementById('schedule-time').value;
+
+            if (!topic || !professionalId || !date || !time) {
+                showMessageBox('Please fill out all fields.');
+                return;
+            }
+
+            const professional = db.users.find(u => u.id === professionalId);
+            const roomId = Math.random().toString(36).substring(2, 8).toUpperCase(); // 6-digit alphanumeric code
+
+            const newWebinar = {
+                id: Date.now().toString(),
+                roomId,
+                topic,
+                professionalId: professional.id,
+                professionalName: professional.username,
+                startTime: new Date(`${date}T${time}`).toISOString(),
+                status: 'scheduled',
+            };
+
+            db.webinars.push(newWebinar);
+            saveData();
+            showMessageBox(`Webinar scheduled! Room Code: ${roomId}. Professional: ${professional.username}.`);
+            event.target.reset();
+            renderAdminDashboard();
+        });
+
+        function stopWebinar(webinarId) {
+            const webinar = db.webinars.find(w => w.id === webinarId);
+            if (webinar) {
+                webinar.status = 'ended';
+                saveData();
+                showMessageBox(`Webinar "${webinar.topic}" has been stopped.`);
+                renderAdminDashboard();
+            }
+        }
+
+        function addInternshipFromRequest(requestId) {
+            const request = db.internshipRequests.find(req => req.id === requestId);
+            if (!request) return;
+
+            // Move the request data to a form for the admin to fill out details
+            document.getElementById('internship-title').value = request.topic;
+            document.getElementById('internship-company').value = '';
+            document.getElementById('internship-link').value = '';
+            document.getElementById('internship-guidelines').value = `This internship was requested by ${request.customerName}. It is related to ${request.topic}.`;
+
+            // Remove the request from the requests list
+            db.internshipRequests = db.internshipRequests.filter(req => req.id !== requestId);
+            saveData();
+            showMessageBox(`Request for "${request.topic}" moved to the 'Add Internship' form. Fill out the details and click 'Add Internship'.`);
+            renderAdminDashboard();
+        }
+
+        document.getElementById('add-internship-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const title = document.getElementById('internship-title').value;
+            const company = document.getElementById('internship-company').value;
+            const link = document.getElementById('internship-link').value;
+            const guidelines = document.getElementById('internship-guidelines').value;
+
+            const newInternship = {
+                id: Date.now().toString(),
+                title,
+                company,
+                link,
+                guidelines
+            };
+            db.internships.push(newInternship);
+            saveData();
+            showMessageBox('Internship added successfully!');
+            event.target.reset();
+        });
+
+        // --- Customer Functions ---
+        document.getElementById('internship-request-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const topic = document.getElementById('internship-request-topic').value;
+
+            const newRequest = {
+                id: Date.now().toString(),
+                customerId: currentUser.id,
+                customerName: currentUser.username,
+                topic,
+            };
+            db.internshipRequests.push(newRequest);
+            saveData();
+            document.getElementById('internship-request-message').textContent = 'Your internship request has been sent to the admin. We will notify you once it is available.';
+            event.target.reset();
+        });
+
+        function renderCustomerDashboard() {
+            // Render Internships
+            const internshipList = document.getElementById('internship-list-customer');
+            internshipList.innerHTML = '';
+            if (db.internships.length === 0) {
+                internshipList.innerHTML = '<p class="text-gray-500 text-sm">No internships available yet.</p>';
+            } else {
+                db.internships.forEach(internship => {
+                    const internshipItem = document.createElement('div');
+                    internshipItem.className = 'card p-4 mb-4';
+                    internshipItem.innerHTML = `
+                        <h4 class="font-bold text-lg">${internship.title}</h4>
+                        <p class="text-gray-600">${internship.company}</p>
+                        <p class="text-sm mt-2"><strong>Guidelines:</strong> ${internship.guidelines}</p>
+                        <a href="${internship.link}" target="_blank" class="text-blue-600 hover:underline mt-2 inline-block">Apply Now &rarr;</a>
+                    `;
+                    internshipList.appendChild(internshipItem);
+                });
+            }
+
+            // Render chat messages
+            renderChatMessages('customer');
+        }
+
+        document.getElementById('join-webinar-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const roomCode = document.getElementById('webinar-room-code').value.toUpperCase().trim();
+            const messageDiv = document.getElementById('join-webinar-message');
+            messageDiv.textContent = '';
+
+            const webinar = db.webinars.find(w => w.roomId === roomCode && w.status === 'live');
+
+            if (webinar) {
+                window.location.href = `webinar.html?roomId=${webinar.roomId}`;
+            } else {
+                messageDiv.textContent = 'Invalid room code or the webinar has not started yet.';
+            }
+        });
+
+        // --- Agent Functions ---
+        function renderAgentDashboard() {
+            // Render customer chat list
+            const chatList = document.getElementById('customer-chat-list');
+            chatList.innerHTML = '';
+            const chatPartners = [...new Set(db.chats.map(chat => chat.senderId === currentUser.id ? chat.recipientId : chat.senderId))];
+
+            if (chatPartners.length === 0) {
+                chatList.innerHTML = '<li class="text-gray-500">No active chats.</li>';
+            }
+
+            chatPartners.forEach(partnerId => {
+                const partner = db.users.find(u => u.id === partnerId);
+                if (partner && partner.role === 'customer') {
+                    const chatItem = document.createElement('li');
+                    chatItem.innerHTML = `<a href="#" onclick="selectChat('${partner.id}', '${partner.username}'); return false;" class="text-blue-600 hover:underline">${partner.username}</a>`;
+                    chatList.appendChild(chatItem);
+                }
+            });
+        }
+
+        function selectChat(partnerId, partnerName) {
+            currentChatRecipient = partnerId;
+            document.getElementById('current-chat-header').textContent = `Chat with ${partnerName}`;
+            document.getElementById('agent-chat-view').classList.remove('hidden');
+            renderChatMessages('agent');
+        }
+
+        // --- Professional Functions ---
+        function renderProfessionalDashboard() {
+            const webinarList = document.getElementById('professional-webinar-list');
+            webinarList.innerHTML = '';
+
+            // Filter both scheduled and live webinars for the current professional
+            const professionalWebinars = db.webinars.filter(web => web.professionalId === currentUser.id);
+
+            if (professionalWebinars.length === 0) {
+                webinarList.innerHTML = '<p class="text-gray-500 text-sm">You have no assigned webinars.</p>';
+            } else {
+                professionalWebinars.forEach(webinar => {
+                    const webinarItem = document.createElement('div');
+                    webinarItem.className = `card p-4 mb-4 ${webinar.status === 'live' ? 'bg-green-50' : ''}`;
+
+                    const startTime = new Date(webinar.startTime);
+                    const isReady = new Date() >= startTime && webinar.status !== 'ended';
+                    const buttonText = webinar.status === 'live' ? 'Re-join Webinar' : 'Start Webinar';
+                    const buttonClass = isReady ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed';
+
+                    webinarItem.innerHTML = `
+                        <h4 class="font-bold text-lg">${webinar.topic}</h4>
+                        <p class="text-gray-600">Scheduled: ${startTime.toLocaleString()}</p>
+                        <p class="text-gray-600 mt-1">Room Code: <span class="font-bold">${webinar.roomId}</span></p>
+                        <p class="text-sm mt-2 ${isReady ? 'text-green-600' : 'text-red-500'}">
+                            ${isReady ? 'Ready to go live!' : 'Not yet scheduled to start.'}
+                        </p>
+                        <button onclick="startWebinar('${webinar.id}')" class="btn ${buttonClass} mt-4" ${isReady ? '' : 'disabled'}>${buttonText}</button>
+                    `;
+                    webinarList.appendChild(webinarItem);
+                });
+            }
+        }
+
+        // --- Chat Functions ---
+        function sendChatMessage(recipientRole) {
+            let messageInput, chatMessagesDiv, recipient;
+
+            if (recipientRole === 'agent') {
+                messageInput = document.getElementById('customer-chat-input');
+                chatMessagesDiv = document.getElementById('customer-chat-messages');
+                // Find any agent to chat with (for this simple demo)
+                recipient = db.users.find(u => u.role === 'agent' && u.isApproved);
+                if (!recipient) {
+                    showMessageBox('No agents are currently available for chat.');
+                    return;
+                }
+                currentChatRecipient = recipient.id;
+            } else if (recipientRole === 'customer') {
+                messageInput = document.getElementById('agent-chat-input');
+                chatMessagesDiv = document.getElementById('agent-chat-messages');
+                recipient = db.users.find(u => u.id === currentChatRecipient);
+            }
+
+            if (!messageInput.value.trim() || !recipient) return;
+
+            const newMessage = {
+                id: Date.now().toString(),
+                senderId: currentUser.id,
+                recipientId: recipient.id,
+                senderName: currentUser.username,
+                text: messageInput.value,
+                timestamp: new Date().toISOString()
+            };
+            db.chats.push(newMessage);
+            saveData();
+            messageInput.value = '';
+            renderChatMessages(currentUser.role);
+        }
+
+        function renderChatMessages(userRole) {
+            let chatMessagesDiv;
+            let filteredChats;
+
+            if (userRole === 'customer') {
+                chatMessagesDiv = document.getElementById('customer-chat-messages');
+                filteredChats = db.chats.filter(chat =>
+                    (chat.senderId === currentUser.id && db.users.find(u => u.id === chat.recipientId)?.role === 'agent') ||
+                    (chat.recipientId === currentUser.id && db.users.find(u => u.id === chat.senderId)?.role === 'agent')
+                );
+            } else if (userRole === 'agent' && currentChatRecipient) {
+                chatMessagesDiv = document.getElementById('agent-chat-messages');
+                filteredChats = db.chats.filter(chat =>
+                    (chat.senderId === currentUser.id && chat.recipientId === currentChatRecipient) ||
+                    (chat.recipientId === currentUser.id && chat.senderId === currentChatRecipient)
+                );
+            } else {
+                return; // Do nothing if a chat isn't selected
+            }
+
+            chatMessagesDiv.innerHTML = '';
+            if (filteredChats.length === 0) {
+                chatMessagesDiv.innerHTML = '<p class="text-center text-gray-400 text-sm">Start a new chat.</p>';
+            }
+
+            filteredChats.forEach(chat => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${chat.senderId === currentUser.id ? 'sent' : 'received'}`;
+                messageDiv.textContent = chat.text;
+                chatMessagesDiv.appendChild(messageDiv);
+            });
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }
+
+        // --- Webinar Functions ---
+        function startWebinar(webinarId) {
+            const webinar = db.webinars.find(w => w.id === webinarId);
+            if (!webinar) {
+                showMessageBox("Webinar not found.");
+                return;
+            }
+
+            const now = new Date();
+            const scheduledTime = new Date(webinar.startTime);
+
+            if (now < scheduledTime) {
+                showMessageBox(`The webinar is not scheduled to start until ${scheduledTime.toLocaleString()}.`);
+                return;
+            }
+
+            webinar.status = 'live';
+            saveData();
+
+            window.location.href = `webinar.html?roomId=${webinar.roomId}`;
+        }
+
+        // Initialize the app on page load
+        window.onload = initialize;
+    </script>
+</body>
+
+</html>
